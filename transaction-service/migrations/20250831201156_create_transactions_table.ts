@@ -6,7 +6,7 @@ export async function up(knex: Knex): Promise<void> {
     transactions.string("transaction_name");
     transactions.string("location");
     transactions.integer("transaction_amt");
-    transactions.integer("risk_score");
+    transactions.float("fraud_score");
     transactions.string("status");
     transactions.timestamps(true, true);
   });
