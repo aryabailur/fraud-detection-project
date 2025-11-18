@@ -10,3 +10,11 @@ dist/
 .vscode/
 
 .env/
+
+# Data files
+*.csv
+ml-service/data/
+
+# Model files
+*.pkl
+ml-service/XGmodel.pkl

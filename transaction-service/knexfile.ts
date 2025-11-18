@@ -1,20 +1,32 @@
-import type { Knex } from "knex";
-import "dotenv/config";
+// knexfile.ts
+import dotenv from "dotenv";
+dotenv.config({ path: require("path").resolve(__dirname, "..", ".env") });
 
-const config: { [key: string]: Knex.Config } = {
+const useDatabaseUrl = !!process.env.DATABASE_URL;
+
+const connection = useDatabaseUrl
+  ? {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+    }
+  : {
+      host: String(process.env.DB_HOST ?? "127.0.0.1"),
+      port: Number(process.env.DB_PORT ?? 5432),
+      user: String(process.env.DB_USER ?? "postgres"),
+      password: String(process.env.DB_PASS ?? ""),
+      database: String(process.env.DB_NAME ?? "postgres"),
+      ssl: { rejectUnauthorized: false },
+    };
+
+const config = {
   development: {
     client: "pg",
-    connection: {
-      host: process.env.db_host,
-      port: parseInt(process.env.db_port || "5432"),
-      user: process.env.db_user,
-      password: process.env.db_password,
-      database: process.env.db_database,
-      ssl: { rejectUnauthorized: false },
-    },
+    connection,
     migrations: {
+      tableName: "knex_migrations",
       directory: "./migrations",
     },
+    pool: { min: 0, max: 10 },
   },
 };
 
